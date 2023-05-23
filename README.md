@@ -22,24 +22,10 @@ This command switches the dongle to it's default CDROM mode (0bda:0411) to WIFI 
 to check type ```lsusb``` in the terminal.
 
 4. Voila! You should find the wifi on the networking section (upper corner)
-5. However this wifi mode won't persist after reboot or shutdown. So seperate script file is needed to execute switchmode after every startup. Create a separate script file using
-``` touch tenda_wifi_startup_switchmode.sh ``` 
-6. Edit this file of your favourite editor (ex: ``` gedit tenda_wifi_startup_switchmode.sh ```) and write these 
+5. However this wifi mode won't persist after reboot or shutdown. So seperate script file is needed to execute switchmode after every startup. Create a startup script by following
 ```
-#! /bin/bash
-echo This script automatically switchmodes to wifi mode
-sudo usb_modeswitch -KW -v 0bda -p 1a2b 
+sh -c 'sleep 10; sudo usb_modeswitch -KW -v 0bda -p 1a2b' 
 ```
-7. Give execution rights
-```
-chmod u+x tenda_wifi_startup_switchmode.sh
-```
-8. Add this in ```/etc/rc.local``` to execute the script at startup
-```
-/path/to/your/script/tenda_wifi_startup_switchmode.sh || exit 1   # Starts the switchmode script
-exit 0
-```
-9. Make the rc.local file executable 
-```
-sudo chmod +x /etc/rc.local
-```
+![image](https://github.com/robxcalib3r/Tenda-W311MI-wifi-dongle-driver-setup-for-Jetson-Nano/assets/34865153/1b57e3ec-c227-4092-94ff-c34682de3eef)
+
+This will create this as startup program. The sleep command allows the jetson to wait 10 seconds to load all the necessary harware components before executing the script. You can lower the time if your jetson boots quickly.
